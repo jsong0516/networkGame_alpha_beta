@@ -1,0 +1,489 @@
+                                     GRADERName of student running submit: BinYi LIULogin of student running submit: cs61b-anbSecond team member's name: Byung Gon SongSecond team member's login: cs61b-aygThird team member's name (if any):Yang SuThird team member's login: cs61b-noIMPORTANT:  Once you've submitted Project 2 once, the same team member should submit always.  If a different teammate must submit, inform cs61b@cory.eecs of all the details.  Include a complete list of team members, and let us know which submission you want graded.If you've submitted your project once, or even written a substantial amount of code together, you may not change partners without the permission of the instructor.===============================================================================Does your program compile without errors?Answer: Yes, we ran our code without any compile errors.Have you tested your program on the 61B lab machines?Yes, we ran our program on the CS61b lab machines. We also build a test.java file to test ourhasNetwork method, VaildMoves method and alpha-beta pruning.Did you successfully implement game tree search?  Did you successfullyimplement alpha-beta pruning?  Are there any limitations on it?  What is thedefault number of search levels set by the one-parameter MachinePlayer constructor (or is it a variable-depth search)?Answer: Our default searchDepth = 3, we successfully implement game tree search and alpha-beta pruningDescribe your board evaluation function in some detail.Answer:Does your MachinePlayer use any special method of choosing the first few moves?Answer: We assign the a higher score when MaChinePlayer place a chip the center of the board.Is there anything else the graders should know to help them read your project?Answer: 1. We have comments and good style for every method.
+        2. We put the our inteface in the grader file
+	3. In Our Program we explained all methods’ function and how does they connect with each other and each module
+        4. And also we divide up our module for it’s easy to read
+	5. We use hw5’s DList,DListNode,sList, slistNode package as our ADT
+	
+
+
+      Describe the classes, modules, and interfaces you designed before and while youimplemented the project.  Your description should include:
+
+We have total 5 Modules
+	Module 1: isVaildMove by Binyi LIU
+	Module 2: HasNetWrok by Byung Gon Song
+	Module 3: Minimax alpha-beta pruning. by Yang Su
+	Module 4: Evaulator Three of us
+	Module 5: DList, DListNode, Slist, SlistNode: Binyi LIU and Byung gon Song
+
+Functionality of each Module:
+	Module 1,2 is in GameBoard Class in order to solve the invalidmove and hasnetwork			
+	Module 3 is in the MachinePlayer Class in order to choose the optimal move and return to the Machineplayer.
+	Module 4 is in the Evaluator Class in order to assign each gameboard a score so that AI can pick up best score
+	Module 5 is in the package list, is a ADT in oder to help us to store the datas and status
+	Board Class:         A class to hold static fields for us to use in the class  GameBoard
+	GameBoard Class:     A class that contain two modules, module 1 to check the vaildmoves that can made by Machineplayer, module 2 to check is there is a connected win.
+	MachinePlayer Class: A class that contain 1 modules of alpha beta pruning. This module gonna help Machine choose the optimal move base on opponent’s moves.
+	
+For the prototype please take look at the interface below, For here i just list the methods and function of each module.
+	_________________________________________________________________________________________________________
+	Module 1 											
+	* @author BinYi LIU											*
+        * The following methods check if the game has a Validmove						*
+        * GetChip method     : A method  can look up whether a cell has a black piece, white piece, or is empty *
+        * Corner method      : A method to check if the position is the corner of the gameBoard			*
+        * GoalState method   : A method to check the goal state for black and white			        *
+    	* Neighbors method   : A method to find around neighbors of give chips position				*
+    	* isClustered method : Determines whether the move with create a cluster if a chip is moved there       *
+    	* Above are the helper methods to check if there is a Validmove						*
+        _________________________________________________________________________________________________________
+
+	______________________________________________________________________________________________________________________
+	Module 2 												    	     *									
+	* @author Byung Gon Song											     *									
+        * The following methods check if the game has a Network							    	     *
+        * currentConnection method     : A method  can look up whether a cell has a black piece, white piece, or is empty    *
+        * hasNetwork method      : A method to check if the position is the corner of the gameBoard			     *
+        * isGoal method   : A method to check the goal state for black and white					     *
+        * isOppositeTeamStart method   : A method to find around neighbors of give chips position			     *
+        * restConnection method : Determines whether the move with create a cluster if a chip is moved there		     *
+	_____________________________________________________________________________________________________________________*
+
+
+        __________________________________________________
+        * Module 3: Minimax alpha-beta pruning.          *
+        * @author Su yang                                *
+        __________________________________________________
+
+
+	___________________________________________________________________
+   	* Module 4: Evaluator.                         		           *
+   	* @author BinYi LIU                            		           *
+    	* @author Byung Gon Song                                           *
+    	* @author Su yang                                                  *
+   	____________________________________________________________________
+
+
+	____________________________________________________________________________________________________________
+  	* Module 5: DList, DListNode, Slist, SlistNode 								   *
+    	* @author BinYi LIU                            								   *
+    	* @author Byung Gon Song                     								   *
+    	* An ADT to help us in method                  							           *
+    	* IsvaildMove, hasNetwork                     								   *
+    	* Alpha-beta Pruning    										   *
+	* InsertFront() method, insert a node to in front of the DLIST						   *
+	* Front() method,	get the head of the DLIST							   *
+	* isValidNode method,   check if the DLISTNODE is valid							   *
+	* next() method, 	return the next element								   *
+	* item() method, 	return the item of the DlistNode						   *
+	* InsertBack ()method, insert a node to the back of the DLIST        	 				   *
+    	* firrst() method,      return the head of the SLIST							   *
+	* insert() method,	insert an item to the SIST							   *
+	*_removefront()		remove the head of the SLIST							   *
+	____________________________________________________________________________________________________________
+
+	
+
+
+
+Board Class: A class to hold final static fields for us to use in the class  GameBoard
+
+Interface Board {
+	public static final int UP = 12;
+	public static final int DRU = 1;
+	public static final int RIGHT = 3;
+	public static final int DRD = 5;
+	public static final int DOWN = 6;
+	public static final int DLD = 7;
+	public static final int LEFT = 9;
+	public static final int DLU = 11;
+	public static final int INVALID_COLOR = -1;
+	public static final int VISITED = 2;
+	public static final int P1 = 0; // BLACK
+	public static final int P2 = 1; // WHITE
+	public static final int UNDETERMINED = -2;
+	public static final int P1_WIN = 1; // BLACK_WIN
+	public static final int P2_WIN = -1; // WHITE_WIN
+	public static final int DRAW = 0;
+	public static final int NUM_PLAYER = 2;
+	public static final int NUM_MAX_MOVE = 10;
+	public static final int[] INVALIDPOSITION = {0, 70, 7, 77};
+	public static final int[] INVALID_P1 = {10, 20, 30, 40, 50, 60, 17, 27, 37, 47, 57, 67}; // white is p1, first. Read readme.pdf for more info
+	public static final int[] INVALID_P2 = {1, 2, 3, 4, 5, 6, 71, 72, 73, 74, 75, 76}; // black is p2, second
+	public static final int CONNECTION_TO_WIN = 5;
+	public static final int MAX_X = 7;
+	public static final int MAX_Y = 7;
+	public static final int DIMENSTION = 8;
+}	GameBoard Class: A class that contain two modules, module 1 to check the vaildmoves that can made by Machineplayer, module 2 to check is there is a connected win.Interface GameBoard {		public final static int Dimension = 8;//Board Dimension should be 8	
+	// -1 represent empty, 0 represent Black, 1 represent White	public final static int Black = 0;	public final static int White = 1;	public final static int Empty = -1;        public final static int Up = 2;	public final static int Down = 3;	public final static int Left= 4;	public final static int Right = 5;	public final static int Left_Up = 6;	public final static int Left_Down = 7;	public final static int Right_Up = 8;	public final static int Right_Down = 9;		/**
+	 * Constructor to represent 8 X 8 empty gameBoard
+	 */ 	 public GameBoard() {	 }		/**
+	 * This constructor duplicates a board.	 * It takes in a Board and duplicates its contents.	 * This constructor is use for the game after all 10 chips           * @param temp is the current Board we are duplicating.         */         public GameBoard (GameBoard temp){    	 }
+
+	*****************************************************************************************************************
+        * Module 1 VaildMove Module											*
+	* @author BinYi LIU												*
+        * The following methods check if the game has a Validmove							*
+        * GetChip method     : A method  can look up whether a cell has a black piece, white piece, or is empty 	*
+        * Corner method      : A method to check if the position is the corner of the gameBoard			        *
+        * GoalState method   : A method to check the goal state for black and white					*
+    	* Neighbors method   : A method to find around neighbors of give chips position				        *
+    	* isClustered method : Determines whether the move with create a cluster if a chip is moved there		*
+    	* Above are the helper methods to check if there is a Validmove						        *
+   	***************************************************************************************************************	*	/**   	 * A method  can look up whether a cell has a black piece,  white piece, or is empty 	 * by given the (x, y) coordinates of the cell.	 * @param x the x coordinate of the spot         * @param y the y coordinate of the spot         * @return the contents of the board in that spot (-1, 0, 1  	 */	 protected int getChip(int x, int y) {
+
+	 } 		/**	 * Determines whether a move is valid or not	 * it's should following the rules below	 * 1. each connected line has to be the different direction.	 * 2. if the chips are connected the around space is illegal.(opponent can put it on)	 * 3. no 2 chips can play on the same location	         * 4. position[0][0],[0][7],[7][0],[7][7] cannot put any chips         * 5.no constructive 3 chips on a line.         * we should have 5 methods to check each condition above	 * @param m the move being evaluated	 * @param playerColor the player being evaluated	 * @return true if the move is valid, false otherwise	 */	 protected boolean isValidMove(Move move, int color) {	         }	/**	 * check if the location is the board	 * @param m the Move objet	 * @return true if it is on the board	 */	 protected boolean onBoard(Move m) {	 }		/** 	 * makeMove takes a legal move and an int color and changes the board. It can make         * an add move or a step move and it labels the move as which it is. It adds the piece and needs to          * decrement the amount of pieces left for each player.         * @param m - Takes in a move to make         * @param color - Determines which player is making the move         * @return void	 */	 protected void makeMove(Move m, int color) {		 }
+
+         /**
+ 	  * Uses the rules of the game and positions of the current chips
+ 	  * to generate a list of valid moves
+	  * This method is intend to help the minmax alpha-beta method to find all possible moves 
+ 	  * @param playerColor the color of the player whose valid moves are being determined
+ 	  * @return an array of Move objects which represent valid moves for the current game situation
+ 	  */
+ 	  protected DList possibleMoves(int color) {
+
+	  }
+
+	 *********************************************************************************************************************
+         * Module 2 hasNetWork												     *									
+	 * @author Byung Gon Song											     *									
+         * The following methods check if the game has a Network							     *
+         * currentConnection method     : A method  can look up whether a cell has a black piece, white piece, or is empty   *
+         * hasNetwork method      : A method to check if the position is the corner of the gameBoard			     *
+         * isGoal method   : A method to check the goal state for black and white					     *
+         * isOppositeTeamStart method   : A method to find around neighbors of give chips position			     *
+         * restConnection method : Determines whether the move with create a cluster if a chip is moved there		     *
+         // Above are the helper methods to check if there is a Network in the current Board				     *
+         //*******************************************************************************************************************
+	**
+	 * A method to check the currentConnection that we have in the board
+	 * This method can be help in the evaluator
+	 * @param color the player's color either black of white
+	 * @return currentConnection how many current connection that we have for now
+	 */
+	public int currentConnection(int color) {
+	}
+
+	/**
+	 * HasNetwork returns true if this board has a network with 6 or greater length. 
+	 * A valid Connect win should have as least 5 lines connected
+	 * And each line should have the different directions.
+	 * two lines with the same directions should consider invalid connection
+	 * Another winning condition is two goal state must connected in order to win
+     	 * It takes in a player because it is called on the board,
+     	 * It calls a recursive, private function restConnection that repeatedly 
+     	 * @param color the color of the player whose network is being determined
+      	 * @return true if this board has a network with 6 or greater length or false otherwise 
+	 */
+	public boolean hasNetwork(int color) {
+	} 	
+}
+
+
+MachinePlayer Class: 
+A class that contain 1 modules of alpha beta pruning. 
+To Help Machine choose the optimal move base on opponent’s moves.
+
+public class MachinePlayer extends Player {
+ 
+  protected int color;
+  protected int depth;
+  protected int opp_color;
+  protected GameBoard board;
+  public static final boolean Computer = true;
+  private static final int DEFAULTDEPTH = 3;
+  public final static int MYWIN = 20;
+  public final static int OPPONENTWIN = -20;
+  
+  // Creates a machine player with the given color.  Color is either 0 (black)
+  // or 1 (white).  (White has the first move.)
+  public MachinePlayer(int color) {
+	  
+  }
+
+  // Creates a machine player with the given color and search depth.  Color is
+  // either 0 (black) or 1 (white).  (White has the first move.)
+  public MachinePlayer(int color, int searchDepth) {
+	  
+  }
+
+  // Returns a new move by "this" player.  Internally records the move (updates
+  // the internal game board) as a move by "this" player.
+  public Move chooseMove() {
+
+  } 
+
+  // If the Move m is legal, records the move as a move by the opponent
+  // (updates the internal game board) and returns true.  If the move is
+  // illegal, returns false without modifying the internal state of "this"
+  // player.  This method allows your opponents to inform you of their moves.
+  public boolean opponentMove(Move m) {
+	
+  }
+
+  // If the Move m is legal, records the move as a move by "this" player
+  // (updates the internal game board) and returns true.  If the move is
+  // illegal, returns false without modifying the internal state of "this"
+  // player.  This method is used to help set up "Network problems" for your
+  // player to solve.
+  public boolean forceMove(Move m) {
+  }
+  
+  
+    **************************************************
+    * Module 3: Minimax alpha-beta pruning.          *
+    * @author Su yang                                *
+    **************************************************
+   /**  
+    * Assigns a score to a board on the game tree. It is part of the Game Tree Search Module. It
+    * contains two important functions. It primarily checks if there is a network on the current board (by calling the and 
+    * then assigns a score based on recursively evaluating the next boards to a certain depth in order to 
+    * choose the next best possible move. It also needs to check if it is more advantageous to move forward for itself 
+    * or to ruin the opponent's network in progress. 
+    * @param side is the color of the player who's moves we are currently looking for.
+    * @param depth is how many more turns the algorithm can look ahead for a network or to evaluate a score.
+    * @param alpha is the score the computer knows with certainty it can achieve.
+    * @param beta is the score the opponent knows with certainty it can achieve.
+    * @param board a board to represent the chess board
+    * @param isFirst Check who plays the first black or white
+    * @return a Move which holds the highest scoring move. This is known as the BestMove.
+    */
+    private Best alphaBetaPruning(boolean side, int depth, double alpha, double beta, GameBoard board, boolean isFirst){
+	
+    }
+    /**
+     * A protected method to call alphaBetaPruing class
+     * we will  store the best move and best score into the Best class
+     * In the Choose Move we will call this method to return the optimal move for MachinePlayer
+     * @param color represent which player is playing the game
+     * @return bestMove the Best class that contains the best class and best score
+     */
+    protected Best bestMove(int color){
+
+    }
+}
+      ************************************************
+    * Module 4: Evaluator.                         *
+    * @author BinYi LIU                            *
+    * @author Byung Gon Song                       *
+    * @author Su yang                              *
+    ************************************************  Evaluator Class: Assign a score to each gameboard so the machine will choose the move that has the highest score.
+
+
+
+    ************************************************
+    * Module 5: DList, DListNode, Slist, SlistNode *
+    * @author BinYi LIU                            *
+    * @author Byung Gon Song                       *
+    * An ADT to help us in method                  *
+    * IsvaildMove, hasNetwork                      *
+    * Alpha-beta Pruning                           *
+    ************************************************
+
+
+public class DList extends List {
+
+  /**
+   *  (inherited)  size is the number of items in the list.
+   *  head references the sentinel node.
+   *  Note that the sentinel node does not store an item, and is not included
+   *  in the count stored by the "size" field.
+   *  DO NOT CHANGE THE FOLLOWING FIELD DECLARATION.
+   **/
+
+  protected DListNode head;
+
+  /**
+   *  DList() constructs for an empty DList.
+   */
+  public DList() {
+  }
+
+  /**
+   *  insertFront() inserts an item at the front of this DList.
+   *  @param item is the item to be inserted.
+   *  Performance:  runs in O(1) time.
+   **/
+  public void insertFront(Object item) {
+  }
+
+  /**
+   *  insertBack() inserts an item at the back of this DList.
+   *  @param item is the item to be inserted.
+   *  Performance:  runs in O(1) time.
+   **/
+  public void insertBack(Object item) {
+  }
+
+  /**
+   *  front() returns the node at the front of this DList.  If the DList is
+   *  empty, return an "invalid" node--a node with the property that any
+   *  attempt to use it will cause an exception.  (The sentinel is "invalid".)
+   *  DO NOT CHANGE THIS METHOD.
+   *  @return a ListNode at the front of this DList.
+   *  Performance:  runs in O(1) time.
+   */
+  public ListNode front() {
+  }
+
+  /**
+   *  back() returns the node at the back of this DList.  If the DList is
+   *  empty, return an "invalid" node--a node with the property that any
+   *  attempt to use it will cause an exception.  (The sentinel is "invalid".)
+   *  DO NOT CHANGE THIS METHOD.
+   *  @return a ListNode at the back of this DList.
+   *  Performance:  runs in O(1) time.
+   */
+   public ListNode back() {
+  }
+
+
+  public class DListNode extends ListNode {
+
+  /**
+   *  (inherited)  item references the item stored in the current node.
+   *  (inherited)  myList references the List that contains this node.
+   *  prev references the previous node in the DList.
+   *  next references the next node in the DList.
+   *  DO NOT CHANGE THE FOLLOWING FIELD DECLARATIONS.
+   **/
+
+  protected DListNode prev;
+  protected DListNode next;
+
+  /**
+   *  isValidNode returns true if this node is valid; false otherwise.
+   *  An invalid node is represented by a `myList' field with the value null.
+   *  Sentinel nodes are invalid, and nodes that don't belong to a list are
+   *  also invalid.
+   *  @return true if this node is valid; false otherwise.
+   *  Performance:  runs in O(1) time.
+   */
+  public boolean isValidNode() {
+  }
+
+  /**
+   *  next() returns the node following this node.  If this node is invalid,
+   *  throws an exception.
+   *  @return the node following this node.
+   *  @exception InvalidNodeException if this node is not valid.
+   *  Performance:  runs in O(1) time.
+   */
+  public ListNode next() throws InvalidNodeException {
+  }
+
+  /**
+   *  prev() returns the node preceding this node.  If this node is invalid,
+   *  throws an exception.
+   *  @param node the node whose predecessor is sought.
+   *  @return the node preceding this node.
+   *  @exception InvalidNodeException if this node is not valid.
+   *  Performance:  runs in O(1) time.
+   */
+  public ListNode prev() throws InvalidNodeException {
+  }
+
+  /**
+   *  insertAfter() inserts an item immediately following this node.  If this
+   *  node is invalid, throws an exception.
+   *  @param item the item to be inserted.
+   *  @exception InvalidNodeException if this node is not valid.
+   *  Performance:  runs in O(1) time.
+   */
+  public void insertAfter(Object item) throws InvalidNodeException {
+  }
+
+  /**
+   *  insertBefore() inserts an item immediately preceding this node.  If this
+   *  node is invalid, throws an exception.
+   *  @param item the item to be inserted.
+   *  @exception InvalidNodeException if this node is not valid.
+   *  Performance:  runs in O(1) time.
+   */
+
+  public void insertBefore(Object item) throws InvalidNodeException {
+  }
+  /**
+   *  remove() removes this node from its DList.  If this node is invalid,
+   *  throws an exception.
+   *  @exception InvalidNodeException if this node is not valid.
+   *  Performance:  runs in O(1) time.
+   */
+  public void remove() throws InvalidNodeException {
+  }
+
+
+  ******************************************************************************************
+  slist and slistNode ADT
+  public class slist {
+	public slist() {
+	}
+	 /**
+         * A method return the size of DList
+         * @return size the size of the DList
+         */
+	public int size() {
+	}
+
+	/**
+	 * A method check is the size is empty or not
+	 * @return true if the size is empty
+	 */
+
+	public boolean isEmpty() {
+	}
+
+	/**
+         * Insert an object at the end of list. It doesn't insert null object.
+	 */
+	public void insert(Object item) {
+	}
+	
+        /**
+	 * Insert an object at the end of list. It doesn't insert null object.
+	 */
+	public void removeFront() {;
+	}
+
+	/**
+	 * A method return the head of slistNode
+	 * @return head the first slistNode
+	 */
+	public slistNode first() {
+	}
+
+	/**
+         * A method return the tail of slistNode
+         * @return tail
+         */
+	public slistNode end() {
+	}
+
+
+  public class slistNode {
+	public Object item;
+	public slistNode next;
+
+	/**
+	 * A constructor with
+	 * item = null;
+	 * next = null;
+	 */
+	public slistNode() {
+	}
+
+	/**
+	 * @param object any object
+	 * @param next get the next item of the slistNode
+	 */
+	public slistNode(Object object, slistNode next){
+	}
+
+    	/**
+     	 * A Constructor to take a object
+    	 * @param object any object
+    	 */
+	public slistNode(Object object) {
+	}
+}
+	  -  A list of each of the "modules" used in or by MachinePlayer, similar to     the list in the "Teamwork" section of the README (but hopefully more     detailed).  (If you're using a list class, that should probably count as     a separate module.)	  -  For each module, list the class(es) the module is implemented in.  -  For each module, say which of your team members implemented it.  -  For each module, describe its interface--specifically, the prototype and     behavior of each method that is available for external callers (outside     the module) to call.  Don't include methods that are only meant to be     called from within the module.     For each method, provide (1) a method prototype and (2) a complete,     unambiguous description of the behavior of the method/module.  This     description should also appear before the method in your code's comments.
